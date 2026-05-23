@@ -1,0 +1,104 @@
+    /* ===== BOOKING FORM ===== */
+    .booking-form {
+      margin-top: 36px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 4px;
+      padding: 32px;
+    }
+    .booking-form h3 {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--white);
+      margin-bottom: 20px;
+    }
+    .bf-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .bf-field input,
+    .bf-field select,
+    .bf-field textarea {
+      width: 100%;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 2px;
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      padding: 12px 16px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    .bf-field input::placeholder,
+    .bf-field textarea::placeholder { color: rgba(255,255,255,0.3); }
+    .bf-field input:focus,
+    .bf-field select:focus,
+    .bf-field textarea:focus { border-color: var(--red); }
+    .bf-field select option { background: #1a1a1d; color: #fff; }
+    .bf-field textarea { resize: none; min-height: 80px; }
+    .bf-full { grid-column: span 2; }
+    .bf-submit {
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .bf-note { font-size: 0.75rem; color: rgba(255,255,255,0.35); }
+    #form-status {
+      margin-top: 12px;
+      font-size: 0.82rem;
+      display: none;
+      padding: 10px 14px;
+      border-radius: 2px;
+    }
+    #form-status.success {
+      background: rgba(39,174,96,0.12);
+      border: 1px solid rgba(39,174,96,0.4);
+      color: #2ecc71;
+    }
+    #form-status.error {
+      background: rgba(192,57,43,0.12);
+      border: 1px solid var(--red);
+      color: #e74c3c;
+    }
+
+    @media (max-width: 600px) {
+      .bf-grid { grid-template-columns: 1fr; }
+      .bf-full { grid-column: span 1; }
+      .bf-submit { flex-direction: column; align-items: flex-start; }
+    }
+
+        .btn-2gis {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 167, 78, 0.12);
+      border: 1px solid rgba(0, 167, 78, 0.4);
+      color: #00c45a;
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 9px 18px;
+      border-radius: 2px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+    .btn-2gis svg { flex-shrink: 0; color: #00c45a; }
+    .btn-2gis:hover {
+      background: rgba(0, 196, 90, 0.2);
+      border-color: #00c45a;
+      box-shadow: 0 0 20px rgba(0, 196, 90, 0.2);
+      transform: translateY(-1px);
+    }
+    @media (max-width: 768px) {
+      .btn-2gis { width: 100%; max-width: 320px; justify-content: center; }
+    }

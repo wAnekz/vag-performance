@@ -1,0 +1,123 @@
+.footer {
+  background: var(--dark2);
+  border-top: 1px solid rgba(255,255,255,0.05);
+  padding: 80px 0 0;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1.4fr;
+  gap: 60px;
+  padding-bottom: 60px;
+}
+
+.footer-tagline {
+  font-size: 0.83rem;
+  color: var(--muted);
+  line-height: 1.8;
+  margin-top: 20px;
+  margin-bottom: 28px;
+}
+
+.footer-socials {
+  display: flex;
+  gap: 10px;
+}
+
+.social-btn {
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  transition: var(--transition);
+}
+
+.social-btn:hover {
+  border-color: var(--red);
+  color: var(--red);
+  background: rgba(192,57,43,0.1);
+}
+
+.footer-col h4 {
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--white);
+  margin-bottom: 20px;
+}
+
+.footer-col ul { display: flex; flex-direction: column; gap: 10px; }
+
+.footer-col ul a {
+  font-size: 0.83rem;
+  color: var(--muted);
+  transition: var(--transition-fast);
+  display: block;
+}
+
+.footer-col ul a:hover { color: var(--red); padding-left: 6px; }
+
+.footer-contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.fc-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.fc-item svg { flex-shrink: 0; color: var(--red); margin-top: 2px; }
+
+.fc-item a { color: var(--light-muted); transition: color 0.2s; }
+.fc-item a:hover { color: var(--red); }
+
+.payment-methods {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pm-label {
+  font-size: 0.7rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.pm-tag {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--light-muted);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 3px 9px;
+  border-radius: 1px;
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.05);
+  padding: 24px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fb-copy, .fb-made {
+  font-size: 0.75rem;
+  color: var(--muted);
+}

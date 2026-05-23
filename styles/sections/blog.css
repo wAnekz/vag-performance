@@ -1,0 +1,477 @@
+/* =============================================
+   VAG PERFORMANCE — РАЗДЕЛ «ПОЛЕЗНОЕ» / БЛОГ
+============================================= */
+
+.blog {
+  padding: 120px 0;
+  background: var(--dark);
+  position: relative;
+  overflow: hidden;
+}
+
+.blog::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(192,57,43,0.35), transparent);
+}
+
+.blog-bg-text {
+  position: absolute;
+  font-family: var(--font-display);
+  font-size: 18vw;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255,255,255,0.02);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  white-space: nowrap;
+  letter-spacing: 0.1em;
+}
+
+/* ---- Сетка карточек ---- */
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 48px;
+}
+
+/* ---- Карточка статьи ---- */
+.blog-card {
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.blog-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 0; height: 2px;
+  background: var(--red);
+  transition: width 0.45s ease;
+}
+
+.blog-card:hover {
+  background: rgba(255,255,255,0.045);
+  border-color: rgba(192,57,43,0.25);
+  transform: translateY(-6px);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.35), 0 0 30px var(--red-glow-sm);
+}
+
+.blog-card:hover::after { width: 100%; }
+
+/* Обложка */
+.blog-card-img {
+  position: relative;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.blog-card-img img {
+  transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.blog-card:hover .blog-card-img img {
+  transform: scale(1.06);
+}
+
+/* Плашка категории */
+.blog-cat {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--white);
+  background: var(--red);
+  padding: 4px 10px;
+  border-radius: 2px;
+}
+
+/* Контент карточки */
+.blog-card-body {
+  padding: 28px 28px 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.blog-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.blog-date, .blog-read-time {
+  font-size: 0.7rem;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+}
+
+.blog-read-time {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.blog-read-time::before {
+  content: '·';
+  color: var(--graphite2);
+}
+
+.blog-card-title {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--white);
+  margin-bottom: 10px;
+  line-height: 1.3;
+  transition: color 0.25s ease;
+}
+
+.blog-card:hover .blog-card-title { color: var(--red-bright); }
+
+.blog-card-excerpt {
+  font-size: 0.82rem;
+  color: var(--light-muted);
+  line-height: 1.8;
+  flex: 1;
+  margin-bottom: 20px;
+}
+
+/* Кнопка «Читать дальше» */
+.blog-read-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-top: auto;
+  transition: gap 0.3s ease, color 0.3s ease;
+  user-select: none;
+}
+
+.blog-read-more .brm-arrow {
+  transition: transform 0.35s ease;
+  flex-shrink: 0;
+}
+
+.blog-card:hover .blog-read-more {
+  gap: 14px;
+  color: var(--red-bright, #e74c3c);
+}
+
+.blog-card:hover .blog-read-more .brm-arrow {
+  transform: translateX(5px);
+}
+
+.blog-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Пустое состояние */
+.blog-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 64px 40px;
+  color: var(--muted);
+  font-size: 0.88rem;
+  border: 1px dashed rgba(255,255,255,0.08);
+  border-radius: 4px;
+  display: none;
+}
+/* =============================================
+   ПОЛНОЭКРАННОЕ ОКНО СТАТЬИ
+============================================= */
+.blog-modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(13, 13, 14, 0.99);
+  /* backdrop-filter убран: при opacity:0.98+ он не даёт визуального эффекта,
+     но роняет FPS до ~10 на десктопах из-за дорогого рендера всего фона */
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  will-change: opacity;
+  transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.35s;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.blog-modal.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Кнопка закрытия — прикреплена к модалу, всегда видна при скролле */
+.blog-modal-close {
+  position: sticky;
+  top: 0;
+  z-index: 10001;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 40px;
+  background: linear-gradient(to bottom, rgba(13,13,14,0.98) 80%, transparent);
+  border: none;
+  color: rgba(255,255,255,0.7);
+  font-family: var(--font-body, sans-serif);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.25s ease;
+  flex-shrink: 0;
+}
+
+.blog-modal-close:hover {
+  color: #fff;
+}
+
+/* Иконка × в кружке */
+.blog-modal-close .close-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.blog-modal-close:hover .close-icon {
+  background: var(--red, #c0392b);
+  border-color: var(--red, #c0392b);
+  box-shadow: 0 0 16px rgba(192,57,43,0.45);
+}
+
+/* Контейнер статьи на десктопе */
+.blog-modal-wrap {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 40px 80px 40px;
+  position: relative;
+}
+
+/* Контент внутри статьи */
+.blog-modal-meta {
+  font-family: var(--font-mono, monospace);
+  color: var(--red, #c0392b);
+  font-size: 14px;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.blog-modal-title {
+  font-family: var(--font-display, sans-serif);
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #fff;
+  margin-bottom: 32px;
+}
+
+.blog-modal-img {
+  width: 100%;
+  max-height: 500px;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  display: block;
+}
+
+.blog-modal-text {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 18px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.blog-modal-text p { margin-bottom: 24px; }
+
+.blog-modal-text h3 {
+  font-family: var(--font-display, sans-serif);
+  font-size: 24px;
+  color: #fff;
+  margin-top: 40px;
+  margin-bottom: 16px;
+}
+
+/* ---- Скелетон-карточки при загрузке ---- */
+.blog-skeleton {
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.skel-img {
+  aspect-ratio: 16/9;
+  background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.07) 50%, rgba(255,255,255,0.04) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite;
+}
+
+.skel-body { padding: 28px; }
+
+.skel-line {
+  height: 10px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.07) 50%, rgba(255,255,255,0.04) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite;
+  margin-bottom: 10px;
+}
+
+.skel-line.short { width: 40%; }
+.skel-line.mid   { width: 70%; }
+.skel-line.full  { width: 100%; }
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* =============================================
+   MEDIA QUERIES (RESPONSIVE)
+============================================= */
+@media (max-width: 1024px) {
+  .blog-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .blog { padding: 72px 0; }
+  .blog-grid { grid-template-columns: 1fr; gap: 16px; }
+
+  .blog-modal-wrap {
+    padding: 0 20px 60px 20px;
+  }
+
+  .blog-modal-title { font-size: 2rem; }
+
+  .blog-modal-close {
+    padding: 14px 20px;
+    font-size: 0.72rem;
+  }
+
+  .blog-modal-close .close-icon {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+/* Контейнер для позиционирования стрелок */
+.blog-slider-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+/* Окна просмотра (прячет всё, что не влазит) */
+.blog-slider-track {
+  overflow: hidden;
+  width: 100%;
+}
+
+/* Слайдер: модифицируем сетку ТОЛЬКО внутри трека (не ломаем глобальную .blog-grid) */
+.blog-slider-track .blog-grid {
+  display: flex;
+  gap: 20px;
+  transition: transform 0.4s ease-in-out;
+  width: 100%;
+}
+
+/* Каждая карточка статьи или скелетон внутри слайдера */
+.blog-slider-track .blog-grid > div {
+  flex: 0 0 calc((100% - 40px) / 3); /* 40px — это 2 гэпа по 20px */
+  box-sizing: border-box;
+}
+
+/* Стили для кнопок-стрелок */
+.blog-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+.blog-arrow:hover {
+  background: #fff; /* Или твой акцентный цвет VAG */
+  color: #000;
+}
+.arrow-left { left: -60px; }
+.arrow-right { right: -60px; }
+
+/* Адаптив: на мобилках показываем по 1 статье */
+@media (max-width: 992px) {
+  .blog-slider-track .blog-grid > div {
+    flex: 0 0 100%;
+  }
+  .arrow-left { left: -10px; }
+  .arrow-right { right: -10px; }
+}
+
+.blog-desc {
+  /* Включаем режим многострочного обрезания */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  
+  /* Указываем количество строк, после которого текст оборвется */
+  line-clamp: 3;
+  -webkit-line-clamp: 3; 
+  
+  /* Прячем всё, что не поместилось */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  
+  /* Фиксируем высоту строки, чтобы верстка карточек не прыгала */
+  line-height: 1.5; 
+  
+  /* Необязательно: делаем минимальную высоту, чтобы карточки были одинаковыми, 
+     даже если в одной статье описание короче, чем в других (1.5 * 3 строки = 4.5em) */
+  min-height: 4.5em; 
+}

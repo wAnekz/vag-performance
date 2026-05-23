@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VAG Performance — Админ-панель</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles/admin.css">
+  <link rel="stylesheet" href="./styles/components/image-upload.css"/>
+
+  <!-- Firebase compat CDN -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="splash-logo">VAG<span>.</span>Performance</div>
+  <div class="splash-bar"><div class="splash-bar-fill"></div></div>
+</div>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">VAG<span>.</span>Performance</div>
+    <div class="login-sub">Admin Panel v2.0</div>
+    <h2>Вход в систему</h2>
+    <div id="login-error"></div>
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="auth-email" placeholder="admin@vagperformance.kz" autocomplete="username" />
+    </div>
+    <div class="field">
+      <label>Пароль</label>
+      <input type="password" id="auth-pass" placeholder="••••••••" autocomplete="current-password" />
+    </div>
+    <button class="btn btn-primary" id="btn-login">
+      <span id="login-btn-text">Войти в панель</span>
+    </button>
+  </div>
+</div>
+
+
+<!-- APP -->
+<div id="app">
+
+  <!-- TOPBAR -->
+  <nav class="topbar">
+    <div class="topbar-brand">VAG<span>.</span>Performance</div>
+    <div class="topbar-right">
+      <a href="index.html" target="_blank" class="btn-site">
+        🌐 <span>Открыть сайт</span>
+      </a>
+      <div class="user-badge">
+        <span class="dot"></span>
+        <span class="user-email" id="user-email-display"></span>
+      </div>
+      <button class="btn btn-outline" id="btn-logout">Выйти</button>
+    </div>
+  </nav>
+
+  <!-- WORKSPACE -->
+  <div class="workspace">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-label">Разделы</div>
+      <div class="nav-item active" data-tab="requests">
+        <span class="nav-icon">📋</span>
+        <span>Заявки</span>
+        <span class="nav-badge" id="badge-requests"></span>
+      </div>
+      <div class="nav-item" data-tab="reviews">
+        <span class="nav-icon">💬</span>
+        <span>Отзывы</span>
+      </div>
+      <div class="nav-item" data-tab="gallery">
+        <span class="nav-icon">🔧</span>
+        <span>Галерея</span>
+      </div>
+      <div class="nav-item" data-tab="services">
+        <span class="nav-icon">⚙️</span>
+        <span>Услуги</span>
+      </div>
+      <div class="nav-item" data-tab="blog">
+        <span class="nav-icon">📰</span>
+        <span>Статьи</span>
+      </div>
+      <div class="nav-item" data-tab="stats">
+        <span class="nav-icon">📊</span>
+        <span>Статистика</span>
+      </div>
+      <div class="nav-item" data-tab="content">
+        <span class="nav-icon">✏️</span>
+        <span>Контент</span>
+      </div>
+      <div class="nav-item" data-tab="slider">
+        <span class="nav-icon">🖼️</span>
+        <span>Слайдер</span>
+      </div>
+      <div class="nav-item" data-tab="whyus">
+        <span class="nav-icon">🏆</span>
+        <span>Плюсы</span>
+      </div>
+      <div class="nav-item" data-tab="history">
+        <span class="nav-icon">📜</span>
+        <span>История</span>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main-content">
+
+      <!-- ====== TAB: ЗАЯВКИ ====== -->
+      <div class="tab-panel active" id="tab-requests">
+        <div class="page-header">
+          <h1>Заявки <span class="accent">клиентов</span></h1>
+          <p>Коллекция Firestore: <code>requests</code></p>
+        </div>
+
+        <div class="filter-tabs">
+          <button class="filter-tab active" data-filter="all">Все</button>
+          <button class="filter-tab" data-filter="new">🔴 Новые</button>
+          <button class="filter-tab" data-filter="inwork">🟡 В работе</button>
+          <button class="filter-tab" data-filter="closed">🟢 Закрытые</button>
+        </div>
+
+        <div class="item-list" id="requests-list">
+          <div class="empty-state">
+            <div class="loading-dots"><span></span><span></span><span></span></div>
+            <div style="margin-top:10px">Загрузка заявок…</div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ====== TAB: ОТЗЫВЫ ====== -->
+      <div class="tab-panel" id="tab-reviews">
+        <div class="page-header">
+          <h1>Отзывы <span class="accent">клиентов</span></h1>
+          <p>Коллекция Firestore: <code>reviews</code></p>
+        </div>
+        <div class="two-col">
+          <div class="card">
+            <div class="card-title" id="review-form-title">Добавить отзыв</div>
+            <div class="field"><label>Имя клиента</label><input type="text" id="r-name" placeholder="Артём К." /></div>
+            <div class="form-grid-2">
+              <div class="field"><label>Первая буква (аватар)</label><input type="text" id="r-initial" maxlength="2" placeholder="А" /></div>
+              <div class="field"><label>Дата</label><input type="text" id="r-date" placeholder="15 мая 2025" /></div>
+            </div>
+            <div class="field">
+              <label>Рейтинг</label>
+              <div class="star-row" id="star-row">
+                <button class="star-btn" data-v="1">★</button>
+                <button class="star-btn" data-v="2">★</button>
+                <button class="star-btn" data-v="3">★</button>
+                <button class="star-btn" data-v="4">★</button>
+                <button class="star-btn" data-v="5">★</button>
+              </div>
+            </div>
+            <div class="field"><label>Текст отзыва</label><textarea id="r-text" placeholder="Отличный сервис!…"></textarea></div>
+            <input type="hidden" id="r-edit-id" value="" />
+            <div style="display:flex; gap:10px; margin-top:4px;">
+              <button class="btn btn-primary" id="btn-add-review" style="flex:1">＋ Добавить отзыв</button>
+              <button class="btn btn-outline" id="btn-cancel-review" style="display:none;">Отмена</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Текущие отзывы</div>
+            <div class="item-list" id="reviews-list">
+              <div class="empty-state"><div class="loading-dots"><span></span><span></span><span></span></div><div style="margin-top:10px">Загрузка…</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ====== TAB: ГАЛЕРЕЯ ====== -->
+      <div class="tab-panel" id="tab-gallery">
+        <div class="page-header">
+          <h1>Галерея <span class="accent">работ</span></h1>
+          <p>Коллекция Firestore: <code>gallery</code></p>
+        </div>
+        <div class="two-col">
+          <div class="card">
+            <div class="card-title" id="gallery-form-title">Добавить работу</div>
+            <div class="field"><label>Заголовок работы</label><input type="text" id="g-title" placeholder="Audi R8 — Чип-тюнинг Stage 2" /></div>
+
+            <!-- ЗАМЕНЕНО: input type="url" id="g-url" → upload-zone + hidden input -->
+            <div class="field">
+              <label>Фото работы</label>
+              <div id="upload-gallery"></div>
+              <!-- Скрытый input: admin.js читает его через v('g-url') как раньше -->
+              <input type="hidden" id="g-url" value="" />
+            </div>
+
+            <div class="field"><label>Описание (необязательно, не будет выводится на сайте)</label><textarea id="g-desc" placeholder="Краткое описание работы…"></textarea></div>
+            <input type="hidden" id="g-edit-id" value="" />
+            <div style="display:flex; gap:10px; margin-top:4px;">
+              <button class="btn btn-primary" id="btn-add-gallery" style="flex:1">＋ Добавить в галерею</button>
+              <button class="btn btn-outline" id="btn-cancel-gallery" style="display:none;">Отмена</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Элементы галереи</div>
+            <div class="item-list" id="gallery-list">
+              <div class="empty-state"><div class="loading-dots"><span></span><span></span><span></span></div><div style="margin-top:10px">Загрузка…</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ====== TAB: УСЛУГИ ====== -->
+      <div class="tab-panel" id="tab-services">
+        <div class="page-header">
+          <h1>Услуги <span class="accent">сервиса</span></h1>
+          <p>Коллекция Firestore: <code>services</code></p>
+        </div>
+        <div class="two-col">
+          <div class="card">
+            <div class="card-title" id="service-form-title">Добавить услугу</div>
+            <div class="field"><label>Название услуги</label><input type="text" id="sv-title" placeholder="Чип-тюнинг Stage 1" /></div>
+            <div class="field"><label>Описание</label><textarea id="sv-desc" placeholder="Увеличение мощности двигателя…" rows="3"></textarea></div>
+            <div class="field">
+              <label>Иконка (эмодзи)</label>
+              <input type="text" id="sv-icon" placeholder="⚡" maxlength="4" style="font-size:1.4rem;" />
+              <div class="emoji-picker" id="sv-emoji-picker">
+                <button class="emoji-btn" data-svc="⚡" title="Тюнинг">⚡</button>
+                <button class="emoji-btn" data-svc="🔧" title="Ремонт">🔧</button>
+                <button class="emoji-btn" data-svc="🔍" title="Диагностика">🔍</button>
+                <button class="emoji-btn" data-svc="💻" title="Электроника">💻</button>
+                <button class="emoji-btn" data-svc="🚗" title="Авто">🚗</button>
+                <button class="emoji-btn" data-svc="🛞" title="Колёса">🛞</button>
+                <button class="emoji-btn" data-svc="🛢️" title="Масло">🛢️</button>
+                <button class="emoji-btn" data-svc="⚙️" title="Механика">⚙️</button>
+                <button class="emoji-btn" data-svc="🔋" title="Аккумулятор">🔋</button>
+                <button class="emoji-btn" data-svc="🧲" title="Магнит">🧲</button>
+                <button class="emoji-btn" data-svc="🏎️" title="Спорт">🏎️</button>
+                <button class="emoji-btn" data-svc="🔩" title="Запчасти">🔩</button>
+                <button class="emoji-btn" data-svc="🛡️" title="Гарантия">🛡️</button>
+                <button class="emoji-btn" data-svc="📟" title="Сканер">📟</button>
+                <button class="emoji-btn" data-svc="🌡️" title="Температура">🌡️</button>
+                <button class="emoji-btn" data-svc="💨" title="Турбо">💨</button>
+              </div>
+            </div>
+            <div class="field">
+              <label>Пометка «ХИТ»</label>
+              <select id="sv-hot">
+                <option value="0">Нет</option>
+                <option value="1">Да — отметить как ХИТ</option>
+              </select>
+            </div>
+            <input type="hidden" id="sv-edit-id" value="" />
+            <div style="display:flex; gap:10px; margin-top:4px;">
+              <button class="btn btn-primary" id="btn-add-service" style="flex:1">＋ Добавить услугу</button>
+              <button class="btn btn-outline" id="btn-cancel-service" style="display:none;">Отмена</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Текущие услуги</div>
+            <div class="item-list" id="services-list">
+              <div class="empty-state"><div class="loading-dots"><span></span><span></span><span></span></div><div style="margin-top:10px">Загрузка…</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ====== TAB: Статьи ====== -->
+      <div class="tab-panel" id="tab-blog">
+        <div class="page-header">
+          <h1>Статьи <span class="accent">и Блог</span></h1>
+          <p>Коллекция Firestore: <code>blog</code></p>
+        </div>
+        <div class="two-col">
+          <div class="card">
+            <div class="card-title" id="blog-form-title">Добавить новую статью</div>
+            <div class="field">
+              <label>Заголовок статьи</label>
+              <input type="text" id="b-title" placeholder="Чип-тюнинг Stage 1: Стоит ли делать?" />
+            </div>
+            <div class="field">
+              <label>Краткое описание / Анонс</label>
+              <textarea id="b-desc" placeholder="Разбираем плюсы, минусы и влияние на ресурс двигателя TSI/TDI..."></textarea>
+            </div>
+
+            <!-- ✅ ЗАМЕНЕНО: input type="url" id="b-image" → upload-zone + hidden input -->
+            <div class="field">
+              <label>Обложка статьи</label>
+              <div id="upload-blog"></div>
+              <!-- Скрытый input: admin.js читает его через v('b-image') как раньше -->
+              <input type="hidden" id="b-image" value="" />
+            </div>
+
+            <div class="field">
+              <label>Отображаемая дата</label>
+              <input type="text" id="b-date" placeholder="18 мая 2026" />
+            </div>
+            <input type="hidden" id="b-edit-id" value="" />
+            <div style="display:flex; gap:10px; margin-top:20px;">
+              <button class="btn btn-success" id="btn-add-article" style="flex:1">💾 Опубликовать статью</button>
+              <button class="btn btn-outline" id="btn-cancel-article" style="display:none;">Отмена</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Опубликованные статьи</div>
+            <div class="item-list" id="blog-list">
+              <div class="empty-state">
+                <div class="loading-dots"><span></span><span></span><span></span></div>
+                <div style="margin-top:10px">Загрузка списка статей…</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ====== TAB: СТАТИСТИКА ====== -->
+      <div class="tab-panel" id="tab-stats">
+        <div class="page-header">
+          <h1>Статистика <span class="accent">сайта</span></h1>
+          <p>Документ Firestore: <code>stats/main</code></p>
+        </div>
+        <div class="card" style="max-width:560px">
+          <div class="card-title">Счётчики на главной</div>
+          <div class="stats-grid">
+            <div class="stat-input-group"><label>Лет опыта</label><input type="number" id="s-years" placeholder="10" min="0" /></div>
+            <div class="stat-input-group"><label>Довольных клиентов</label><input type="number" id="s-clients" placeholder="500" min="0" /></div>
+            <div class="stat-input-group"><label>Выполненных работ</label><input type="number" id="s-works" placeholder="1200" min="0" /></div>
+            <div class="stat-input-group"><label>Процент довольных клиентов</label><input type="number" id="s-warranty" placeholder="12" min="0" /></div>
+          </div>
+          <div style="margin-top:20px">
+            <button class="btn btn-success" id="btn-save-stats" style="width:100%">💾 Сохранить в Firebase</button>
+          </div>
+          <div id="stats-note" style="margin-top:12px; font-family:var(--font-mono); font-size:0.7rem; color:var(--muted); display:none;">✓ Данные загружены из Firestore</div>
+        </div>
+      </div>
+
+
+      <!-- ====== TAB: КОНТЕНТ ====== -->
+      <div class="tab-panel" id="tab-content">
+        <div class="page-header">
+          <h1>Контент <span class="accent">сайта</span></h1>
+          <p>Документ Firestore: <code>content/main</code></p>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:start;">
+
+          <!-- Контакты -->
+          <div class="card">
+            <div class="card-title">Контактная информация</div>
+            <div class="field"><label>Номер телефона</label><input type="text" id="c-phone" placeholder="+7 707 933 01 05" /></div>
+            <div class="field"><label>Адрес</label><input type="text" id="c-address" placeholder="Проспект Райымбека, 486Б/127" /></div>
+            <div class="field"><label>Часы работы (основные)</label><input type="text" id="c-hours" placeholder="Пн–Пт: 10:00–19:00" /></div>
+            <div class="field"><label>Часы работы (футер, можно 2 строки через \n)</label><textarea id="c-hours-footer" rows="2" placeholder="Пн–Пт: 10:00–19:00&#10;Сб–Вс: Выходной"></textarea></div>
+            <div class="field"><label>Instagram (ссылка)</label><input type="url" id="c-instagram" placeholder="https://instagram.com/vagperformance" /></div>
+            <div class="field"><label>WhatsApp (номер без + в формате 77XXXXXXXXX)</label><input type="text" id="c-whatsapp" placeholder="77079330105" /></div>
+            <button class="btn btn-success" id="btn-save-contacts" style="width:100%">💾 Сохранить контакты</button>
+          </div>
+
+          <!-- О нас + рейтинг -->
+          <div style="display:flex; flex-direction:column; gap:20px;">
+            <div class="card">
+              <div class="card-title">Блок «О нас»</div>
+
+              <!--  ЗАМЕНЕНО: input type="url" id="c-about-image" + старый <img id="c-about-preview">
+                   → upload-zone (у него есть своё превью) + hidden input.
+                   Скрытый <img c-about-preview> оставлен для обратной совместимости с admin.js updateAboutPreview() -->
+              <div class="field">
+                <label>Фото «О нас»</label>
+                <div id="upload-about"></div>
+                <input type="hidden" id="c-about-image" value="" />
+              </div>
+              <!-- Скрытый элемент: updateAboutPreview() в admin.js ищет его по id, оставляем для совместимости -->
+              <div style="margin-bottom:14px; max-height:140px; overflow:hidden; border-radius:6px; border:1px solid var(--border);">
+                <img id="c-about-preview" src="" alt="" style="display:none; width:100%; height:140px; object-fit:cover;" />
+              </div>
+
+              <div class="field"><label>Абзац 1</label><textarea id="c-about-text-1" rows="3" placeholder="VAG Performance — профессиональный автосервис…"></textarea></div>
+              <div class="field"><label>Абзац 2</label><textarea id="c-about-text-2" rows="3" placeholder="Узкая специализация позволяет нам…"></textarea></div>
+              <button class="btn btn-success" id="btn-save-about" style="width:100%">💾 Сохранить блок «О нас»</button>
+            </div>
+
+            <div class="card">
+              <div class="card-title">Рейтинг в блоке отзывов</div>
+              <div class="form-grid-2">
+                <div class="field"><label>Средний рейтинг (напр. 4.9)</label><input type="text" id="c-rating-score" placeholder="4.9" /></div>
+                <div class="field"><label>Подпись под рейтингом</label><input type="text" id="c-rating-label" placeholder="на основе 200+ отзывов" /></div>
+              </div>
+              <button class="btn btn-success" id="btn-save-rating" style="width:100%">💾 Сохранить рейтинг</button>
+            </div>
+          </div>
+
+        </div>
+        <div id="content-note" style="margin-top:14px; font-family:var(--font-mono); font-size:0.7rem; color:var(--muted); display:none;">✓ Данные загружены из Firestore</div>
+      </div>
+
+
+      <!-- ====== TAB: СЛАЙДЕР ====== -->
+      <div class="tab-panel" id="tab-slider">
+        <div class="page-header">
+          <h1>Hero <span class="accent">слайдер</span></h1>
+          <p>Документ Firestore: <code>content/slider</code> — 3 фото фона главного экрана</p>
+        </div>
+
+        <div class="card" style="max-width:680px">
+          <div class="card-title">Фотографии слайдера</div>
+          <p style="font-family:var(--font-mono); font-size:0.72rem; color:var(--muted); margin-bottom:20px; line-height:1.6;">
+            Загрузите фото с устройства или вставьте ссылку вручную.<br>
+            Изображения сжимаются автоматически перед загрузкой в Firebase Storage.
+          </p>
+
+          <!-- Slide 1 -->
+          <div class="slide-preview-row">
+            <!-- slide-thumb остаётся — admin.js вызывает updateSlideThumb() для него -->
+            <img class="slide-thumb" id="slide-thumb-1" src="" alt="Слайд 1" onerror="this.style.opacity='0.2'" />
+            <div style="flex:1">
+              <div class="slide-label">Слайд 1</div>
+              <!-- ✅ ЗАМЕНЕНО: input type="url" id="slide-url-1" → upload-zone + hidden input -->
+              <div id="upload-slide-1"></div>
+              <input type="hidden" id="slide-url-1" value="" />
+            </div>
+          </div>
+
+          <!-- Slide 2 -->
+          <div class="slide-preview-row">
+            <img class="slide-thumb" id="slide-thumb-2" src="" alt="Слайд 2" onerror="this.style.opacity='0.2'" />
+            <div style="flex:1">
+              <div class="slide-label">Слайд 2</div>
+              <!-- ✅ ЗАМЕНЕНО -->
+              <div id="upload-slide-2"></div>
+              <input type="hidden" id="slide-url-2" value="" />
+            </div>
+          </div>
+
+          <!-- Slide 3 -->
+          <div class="slide-preview-row">
+            <img class="slide-thumb" id="slide-thumb-3" src="" alt="Слайд 3" onerror="this.style.opacity='0.2'" />
+            <div style="flex:1">
+              <div class="slide-label">Слайд 3</div>
+              <!-- ✅ ЗАМЕНЕНО -->
+              <div id="upload-slide-3"></div>
+              <input type="hidden" id="slide-url-3" value="" />
+            </div>
+          </div>
+
+          <div style="margin-top:20px">
+            <button class="btn btn-success" id="btn-save-slider" style="width:100%">💾 Сохранить слайдер</button>
+          </div>
+          <div id="slider-note" style="margin-top:12px; font-family:var(--font-mono); font-size:0.7rem; color:var(--muted); display:none;">✓ Данные загружены из Firestore</div>
+        </div>
+      </div>
+
+
+      <!-- ====== TAB: ПРЕИМУЩЕСТВА ====== -->
+      <div class="tab-panel" id="tab-whyus">
+        <div class="page-header">
+          <h1>Наши <span class="accent">преимущества</span></h1>
+          <p>Коллекция Firestore: <code>whyus</code> — карточки секции «Почему выбирают нас»</p>
+        </div>
+        <div class="two-col">
+
+          <!-- Форма добавления/редактирования -->
+          <div class="card">
+            <div class="card-title" id="whyus-form-title">Добавить преимущество</div>
+
+            <div class="field">
+              <label>Иконка (эмодзи)</label>
+              <input type="text" id="wu-icon" placeholder="Впишите эмодзи" maxlength="4" style="font-size:1.4rem;"/>
+              <div class="emoji-picker" id="emoji-picker">
+                <button class="emoji-btn" data-emoji="🏆" title="Лучший">🏆</button>
+                <button class="emoji-btn" data-emoji="🔧" title="Инструменты">🔧</button>
+                <button class="emoji-btn" data-emoji="✅" title="Проверено">✅</button>
+                <button class="emoji-btn" data-emoji="⚡" title="Быстро">⚡</button>
+                <button class="emoji-btn" data-emoji="🛡️" title="Гарантия">🛡️</button>
+                <button class="emoji-btn" data-emoji="💰" title="Цены">💰</button>
+                <button class="emoji-btn" data-emoji="🔬" title="Диагностика">🔬</button>
+                <button class="emoji-btn" data-emoji="📋" title="Документы">📋</button>
+                <button class="emoji-btn" data-emoji="🚗" title="Авто">🚗</button>
+                <button class="emoji-btn" data-emoji="⭐" title="Качество">⭐</button>
+                <button class="emoji-btn" data-emoji="🕐" title="Время">🕐</button>
+                <button class="emoji-btn" data-emoji="💎" title="Премиум">💎</button>
+                <button class="emoji-btn" data-emoji="🤝" title="Партнёрство">🤝</button>
+                <button class="emoji-btn" data-emoji="📍" title="Локация">📍</button>
+                <button class="emoji-btn" data-emoji="🏅" title="Медаль">🏅</button>
+                <button class="emoji-btn" data-emoji="🔑" title="Ключ">🔑</button>
+              </div>
+            </div>
+
+            <div class="field" style="margin-top:14px;">
+              <label>Заголовок карточки</label>
+              <input type="text" id="wu-title" placeholder="Узкая специализация" />
+            </div>
+
+            <div class="field">
+              <label>Описание</label>
+              <textarea id="wu-desc" rows="3" placeholder="Работаем только с VAG группой. Знаем каждую модель досконально…"></textarea>
+            </div>
+
+            <input type="hidden" id="wu-edit-id" value="" />
+            <input type="hidden" id="wu-order" value="" />
+
+            <div style="display:flex; gap:10px; margin-top:4px;">
+              <button class="btn btn-success" id="btn-save-whyus" style="flex:1">💾 Сохранить</button>
+              <button class="btn btn-outline" id="btn-cancel-whyus" style="display:none;">Отмена</button>
+            </div>
+          </div>
+
+          <!-- Список текущих карточек -->
+          <div class="card">
+            <div class="card-title">Текущие карточки <span id="whyus-count" style="font-weight:400; color:var(--muted); font-size:0.8rem;"></span></div>
+            <div class="item-list" id="whyus-list">
+              <div class="empty-state">
+                <div class="loading-dots"><span></span><span></span><span></span></div>
+                <div style="margin-top:10px">Загрузка…</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- ====== TAB: ИСТОРИЯ ====== -->
+      <div class="tab-panel" id="tab-history">
+        <div class="page-header">
+          <h1>История <span class="accent">изменений</span></h1>
+          <p>Коллекция Firestore: <code>changelog</code> — последние 50 действий</p>
+        </div>
+        <div class="card">
+          <div class="card-title">Лог действий</div>
+          <div class="item-list" id="history-list" style="max-height:70vh;">
+            <div class="empty-state"><div class="loading-dots"><span></span><span></span><span></span></div><div style="margin-top:10px">Загрузка…</div></div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+<script src="image-upload.js"></script>
+<script src="admin.js"></script>
+
+</body>
+</html>

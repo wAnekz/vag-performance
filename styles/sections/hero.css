@@ -1,0 +1,265 @@
+.hero {
+  position: relative;
+  height: 100vh;
+  min-height: 700px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute; /* Фотографии должны быть приклеены к фону */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1; /* Самый нижний слой */
+  overflow: hidden;
+}
+
+.hero-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Чтобы фото не растягивалось, а заполняло экран */
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  z-index: 1;
+}
+
+.hero-img.active {
+  opacity: 1; /* Показываем только активное фото */
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, 
+    rgba(6, 6, 8, 0.5), 
+    rgba(6, 6, 8, 0.8)); /* Затемнение, чтобы текст читался */
+  z-index: 2; /* Поверх фото, но под текстом */
+}
+
+.hero-glow {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: floatGlow 6s ease-in-out infinite;
+}
+
+.hero-glow-1 {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(192,57,43,0.12) 0%, transparent 70%);
+  top: -200px;
+  left: -200px;
+}
+
+.hero-glow-2 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(192,57,43,0.08) 0%, transparent 70%);
+  bottom: 100px;
+  right: 100px;
+  animation-delay: -3s;
+}
+
+@keyframes floatGlow {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(20px, -20px); }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  max-width: 1440px; /* Увеличь макс. ширину, если компьютер широкоформатный */
+  margin: 0 auto;
+  padding: 0 40px;
+  overflow: visible; /* Важно: чтобы ничего не обрезалось и не скрывалось */
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 24px;
+  opacity: 0;
+}
+
+.hero-badge::before {
+  content: '';
+  display: block;
+  width: 36px;
+  height: 1px;
+  background: var(--red);
+}
+
+.hero-title {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  font-family: var(--font-display);
+  /* Используем vw (viewport width), чтобы текст ВСЕГДА зависел от размера экрана */
+  font-size: 8vw; 
+  line-height: 0.9;
+  text-transform: uppercase;
+  white-space: nowrap; /* Запрещаем перенос */
+}
+
+.hero-title span {
+  display: block;
+  width: 100%;
+  white-space: nowrap;   /* Запрет любого переноса внутри строки */
+  word-break: keep-all;  /* Еще один запрет на разрыв */
+  hyphens: none;         /* Отключаем автоматические дефисы */
+}
+
+.hero-title span:first-child {
+  font-size: 7.2vw; /* Делаем его чуть меньше остальных строк, так как оно самое длинное */
+  display: block;
+}
+
+/* Настраиваем размер самого длинного слова */
+.hero-title .main-word {
+  /* На десктопе большое, на мобилке уменьшается до 7.5% от ширины экрана */
+  font-size: clamp(2rem, 7.5vw, 8.5rem); 
+  letter-spacing: -0.02em; /* Чуть плотнее */
+}
+
+/* Остальные слова могут быть чуть крупнее */
+.hero-title .title-accent, 
+.hero-title .sub-word {
+  font-size: clamp(2.5rem, 12vw, 8.5rem);
+}
+
+.hero-title .title-accent {
+  color: var(--red);
+  -webkit-text-stroke: 1px var(--red);
+}
+
+.hero-subtitle {
+  font-size: clamp(0.85rem, 1.5vw, 1rem);
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 44px;
+  opacity: 0;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  opacity: 0;
+}
+
+.hero-scroll {
+  position: absolute;
+  bottom: 0px;       /* Еще ближе к краю, чтобы не мешался */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;           /* Уменьшили расстояние между палочкой и текстом */
+  z-index: 10;
+  opacity: 0.6;       /* Сделали чуть прозрачнее, чтобы не отвлекал */
+}
+
+.scroll-line {
+  width: 1px;
+  height: 35px;       /* Уменьшили высоту линии (было 60px) */
+  background: linear-gradient(to bottom, var(--red), transparent);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Анимация бегущей линии внутри полоски */
+.scroll-line::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+  animation: scrollAnim 2s infinite;
+}
+
+@keyframes scrollAnim {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+.hero-scroll span {
+  font-size: 8px;     /* Уменьшили шрифт (был 10-12px) */
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--white);
+  font-family: var(--font-body);
+}
+
+@keyframes scrollPulse {
+  0% { opacity: 0; transform: scaleY(0); transform-origin: top; }
+  50% { opacity: 1; transform: scaleY(1); }
+  100% { opacity: 0; transform: scaleY(0); transform-origin: bottom; }
+}
+
+.hero-scroll span {
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--muted);
+  writing-mode: vertical-rl;
+}
+
+.hero-dots {
+  position: absolute;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 3;
+}
+
+.hdot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.3);
+  background: transparent;
+  cursor: pointer;
+  transition: var(--transition);
+  padding: 0;
+}
+
+.hdot.active {
+  background: var(--red);
+  border-color: var(--red);
+  box-shadow: 0 0 10px var(--red-glow);
+  transform: scale(1.4);
+}
+
+/* Hero reveal animations */
+.reveal-hero {
+  animation: heroReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) var(--d, 0s) forwards;
+}
+
+@keyframes heroReveal {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,60 @@
+.gallery {
+  padding: 120px 0;
+  background: var(--black);
+}
+
+.gallery .section-header { padding: 0 40px; max-width: 1280px; margin: 0 auto 48px; }
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto;
+  gap: 3px;
+}
+
+.g-item {
+  position: relative;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.g-wide {
+  grid-column: span 2;
+  aspect-ratio: 16/9;
+}
+
+.g-item img {
+  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.g-item:hover img { transform: scale(1.08); }
+
+.g-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(6,6,8,0.75) 0%, transparent 55%);
+  opacity: 1;
+  display: flex;
+  align-items: flex-end;
+  padding: 20px 24px;
+}
+
+.g-overlay span {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--white);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+}
+
+/* На мобилке чуть крупнее текст и меньше отступ */
+@media (max-width: 768px) {
+  .g-overlay {
+    padding: 14px 16px;
+  }
+  .g-overlay span {
+    font-size: 0.72rem;
+  }
+}

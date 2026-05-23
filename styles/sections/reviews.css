@@ -1,0 +1,116 @@
+.reviews {
+  padding: 120px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.reviews-bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(192,57,43,0.06) 0%, transparent 70%);
+}
+
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 60px;
+}
+
+.review-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  backdrop-filter: blur(12px);
+  padding: 36px 32px;
+  border-radius: 4px;
+  transition: var(--transition);
+  position: relative;
+}
+
+.review-card:hover {
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(192,57,43,0.3);
+  transform: translateY(-6px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 0 30px var(--red-glow-sm);
+}
+
+.review-card.featured-review {
+  background: rgba(192,57,43,0.07);
+  border-color: rgba(192,57,43,0.2);
+}
+
+.rc-stars {
+  font-size: 1.1rem;
+  color: #f39c12;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+}
+
+.rc-text {
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.75);
+  line-height: 1.85;
+  font-style: italic;
+  margin-bottom: 28px;
+}
+
+.rc-author {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.rc-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.rc-name {
+  font-size: 0.83rem;
+  font-weight: 600;
+  color: var(--white);
+}
+
+.rc-date {
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.reviews-rating {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  padding: 40px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 3px;
+}
+
+.rr-score {
+  font-family: var(--font-display);
+  font-size: 5rem;
+  color: var(--white);
+  line-height: 1;
+}
+
+.rr-stars {
+  font-size: 1.8rem;
+  color: #f39c12;
+  letter-spacing: 4px;
+  margin-bottom: 8px;
+}
+
+.rr-text {
+  font-size: 0.8rem;
+  color: var(--muted);
+}

@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VAG Performance — Профессиональный сервис VAG</title>
+  <meta name="description" content="Профессиональный автосервис VAG в Алматы. Чип-тюнинг, диагностика, ремонт Audi, Volkswagen, Skoda, Porsche. Опыт 10+ лет, гарантия качества.">
+  <meta property="og:title" content="VAG Performance — Профессиональный сервис VAG">
+  <meta property="og:description" content="Профессиональный автосервис VAG в Алматы. Чип-тюнинг, диагностика, ремонт.">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1200&q=80">
+
+  <link rel="stylesheet" href="./styles/components/global.css">
+  <link rel="stylesheet" href="./styles/components/loader.css">
+  <link rel="stylesheet" href="./styles/components/buttons.css">
+  <link rel="stylesheet" href="./styles/components/section.css">
+  <link rel="stylesheet" href="./styles/components/navbar.css">
+  <link rel="stylesheet" href="./styles/sections/hero.css">
+  <link rel="stylesheet" href="./styles/sections/about.css">
+  <link rel="stylesheet" href="./styles/sections/services.css">
+  <link rel="stylesheet" href="./styles/sections/gallery.css">
+  <link rel="stylesheet" href="./styles/sections/reviews.css">
+  <link rel="stylesheet" href="./styles/sections/cta.css">
+  <link rel="stylesheet" href="./styles/sections/footer.css">
+  <link rel="stylesheet" href="./styles/sections/responsive.css">
+  <link rel="stylesheet" href="./styles/sections/why_us.css">
+  <link rel="stylesheet" href="./styles/sections/blog.css">
+  <link rel="stylesheet" href="./styles/sections/booking.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;500;600;700&family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- LOADER -->
+  <div class="loader" id="loader">
+    <div class="loader-inner">
+      <div class="loader-logo">
+        <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="30" cy="30" r="28" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="176" stroke-dashoffset="176" class="loader-circle"/>
+          <path d="M15 30 L30 15 L45 30" stroke="#ffffff" stroke-width="2" fill="none" class="loader-v"/>
+        </svg>
+      </div>
+      <div class="loader-text">VAG PERFORMANCE</div>
+      <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+    </div>
+  </div>
+
+  <!-- NAVIGATION -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#hero" class="nav-logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="25" cy="25" r="23" stroke="#c0392b" stroke-width="1.5"/>
+            <path d="M10 25 L25 10 L40 25" stroke="#fff" stroke-width="2.5" fill="none"/>
+            <path d="M16 30 L25 10 L34 30" stroke="#c0392b" stroke-width="1.5" fill="none"/>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <span class="logo-main">VAG</span>
+          <span class="logo-sub">PERFORMANCE</span>
+        </div>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#about">О нас</a></li>
+        <li><a href="#services">Услуги</a></li>
+        <li><a href="#gallery">Работы</a></li>
+        <li><a href="#why-us">Преимущества</a></li>
+        <li><a href="#reviews">Отзывы</a></li>
+        <li><a href="#blog">Статьи</a></li>
+        <li><a href="#contact" class="nav-cta">Записаться</a></li>
+      </ul>
+      <button class="burger" id="burger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#about">О нас</a>
+      <a href="#services">Услуги</a>
+      <a href="#gallery">Работы</a>
+      <a href="#why-us">Преимущества</a>
+      <a href="#reviews">Отзывы</a>
+      <a href="#blog">Статьи</a>
+      <a href="#contact">Записаться</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <!--
+        hero-img — src управляется из админки (content/main → hero_img_0..2)
+        Если Firebase не вернул данные — остаётся дефолтный src
+      -->
+      <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1400&q=80"
+           alt="Audi" class="hero-img active" id="heroImg0"/>
+      <img src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=1400&q=80"
+           alt="Porsche" class="hero-img" id="heroImg1"/>
+      <img src="https://images.unsplash.com/photo-1606016159991-dfe4f2746ad5?w=1400&q=80"
+           alt="VW" class="hero-img" id="heroImg2"/>
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="hero-glow hero-glow-1"></div>
+    <div class="hero-glow hero-glow-2"></div>
+
+    <div class="hero-content">
+      <div class="hero-badge reveal-hero" style="--d:0.2s">АЛМАТЫ • PREMIUM AUTO SERVICE</div>
+      <h1 class="hero-title reveal-hero">
+        <span class="main-word">Профессиональный</span>
+        <span class="title-accent">сервис VAG</span>
+        <span class="sub-word">автомобилей</span>
+      </h1>
+      <p class="hero-subtitle reveal-hero" style="--d:0.7s">Audi • Volkswagen • Skoda • Porsche • Zeekr</p>
+      <div class="hero-actions reveal-hero" style="--d:0.9s">
+        <a href="https://wa.me/77079330105" target="_blank" class="btn btn-primary" id="cms-cta-whatsapp-hero">Записаться</a>
+        <a href="#services" class="btn btn-outline">Наши услуги</a>
+      </div>
+    </div>
+
+    <div class="hero-scroll reveal-hero" style="--d:1.2s">
+      <div class="scroll-line"></div>
+      <span>Прокрутите вниз</span>
+    </div>
+
+    <div class="hero-dots">
+      <button class="hdot active" data-i="0"></button>
+      <button class="hdot" data-i="1"></button>
+      <button class="hdot" data-i="2"></button>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-visual" data-scroll>
+          <div class="about-img-wrap">
+            <img src="https://images.unsplash.com/photo-1625047509168-a7026f36de04?w=800&q=80"
+                 alt="Сервис VAG" class="about-img" id="cms-about-image"/>
+            <div class="about-img-decor"></div>
+          </div>
+          <div class="about-badge-float">
+            <div class="abf-num" id="cms-badge-years">10+</div>
+            <div class="abf-txt">лет<br>опыта</div>
+          </div>
+        </div>
+        <div class="about-content" data-scroll>
+          <div class="section-label">О мастерской</div>
+          <h2 class="section-title">Эксперты<br>по <span class="accent">VAG группе</span></h2>
+          <p class="about-desc" id="cms-about-text-1">VAG Performance — профессиональный автосервис в Алматы, специализирующийся исключительно на автомобилях концерна Volkswagen Group. Мы знаем ваш автомобиль до последнего болта.</p>
+          <p class="about-desc" id="cms-about-text-2">Узкая специализация позволяет нам работать быстрее и качественнее, чем универсальные сервисы. Каждый мастер — эксперт именно по VAG.</p>
+          <div class="about-features">
+            <div class="about-feat"><div class="feat-dot"></div>Оригинальные запчасти</div>
+            <div class="about-feat"><div class="feat-dot"></div>Современное оборудование</div>
+            <div class="about-feat"><div class="feat-dot"></div>Гарантия на все работы</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-row" data-scroll>
+        <div class="stat-card">
+          <div class="stat-num" data-stat="years" data-count="10">10</div>
+          <div class="stat-plus">+</div>
+          <div class="stat-label">Лет опыта</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-card">
+          <div class="stat-num" data-stat="clients" data-count="2500">2500</div>
+          <div class="stat-plus">+</div>
+          <div class="stat-label">Довольных клиентов</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-card">
+          <div class="stat-num" data-stat="works" data-count="8000">8000</div>
+          <div class="stat-plus">+</div>
+          <div class="stat-label">Выполненных работ</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-card">
+          <div class="stat-num" data-stat="warranty" data-count="100">100</div>
+          <div class="stat-plus">%</div>
+          <div class="stat-label">Гарантия качества</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <!--
+    id="services-grid" — если в Firestore есть коллекция 'services',
+    скрипт заменяет содержимое на динамические карточки.
+    Иначе показывается статический fallback ниже.
+  -->
+  <section class="services" id="services">
+    <div class="services-bg-text">SERVICES</div>
+    <div class="container">
+      <div class="section-header" data-scroll>
+        <div class="section-label">Что мы делаем</div>
+        <h2 class="section-title">Наши <span class="accent">услуги</span></h2>
+        <p class="section-desc">Полный спектр работ для вашего автомобиля — от технического обслуживания до серьёзного ремонта</p>
+      </div>
+      <div class="services-grid" id="services-grid" data-scroll>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery" id="gallery">
+    <div class="container">
+      <div class="section-header" data-scroll>
+        <div class="section-label">Наши работы</div>
+        <h2 class="section-title">Примеры <span class="accent">работ</span></h2>
+      </div>
+    </div>
+    <div class="gallery-grid" id="gallery-grid" data-scroll>
+  </section>
+
+  <!-- WHY US -->
+  <section class="why-us" id="why-us">
+    <div class="container">
+      <div class="section-header" data-scroll>
+        <div class="section-label">Наши преимущества</div>
+        <h2 class="section-title">Почему <span class="accent">выбирают нас</span></h2>
+      </div>
+      <div class="why-grid" id="whyus-grid" data-scroll>
+        <!-- Заполняется из Firestore (коллекция 'whyus') через script.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section class="reviews" id="reviews">
+    <div class="reviews-bg"></div>
+    <div class="container">
+      <div class="section-header" data-scroll>
+        <div class="section-label">Отзывы клиентов</div>
+        <h2 class="section-title">Что говорят <span class="accent">наши клиенты</span></h2>
+      </div>
+
+      <div class="reviews-grid" id="reviews-grid" data-scroll>
+      </div>
+
+      <!--
+        id="cms-rating-score" и id="cms-rating-text" — управляются из админки (вкладка Контент)
+      -->
+      <div class="reviews-rating" data-scroll>
+        <div class="rr-score" id="cms-rating-score">4.7</div>
+        <div class="rr-details">
+          <div class="rr-stars">★★★★★</div>
+          <div class="rr-text" id="cms-rating-text">Средний рейтинг на основе отзывов клиентов в 2GIS</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOG / ПОЛЕЗНЫЕ СТАТЬИ -->
+  <section class="blog" id="blog">
+    <div class="blog-bg-text">ЗНАНИЯ</div>
+    <div class="container">
+      <div class="section-header" data-scroll>
+        <div class="section-label">Полезное</div>
+        <h2 class="section-title">Статьи &amp; <span class="accent">новости</span></h2>
+        <p class="section-desc">Советы по обслуживанию, разборы типичных проблем VAG и последние новости мастерской</p>
+      </div>
+
+      <!--
+        id="blog-grid" — заполняется из Firestore (коллекция 'articles').
+        Пока статей нет — показывается пустое состояние.
+      -->
+<!-- Контейнер для сетки и стрелок -->
+<div class="blog-slider-container" data-scroll>
+  
+  <!-- Стрелка Влево -->
+  <button class="blog-arrow arrow-left" id="blog-prev-btn" aria-label="Назад">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+  </button>
+
+  <!-- Ограничитель видимости (чтобы не вылезало на весь экран) -->
+  <div class="blog-slider-track">
+    <div class="blog-grid" id="blog-grid">
+      <!-- Скелетоны остаются тут (мы их скроем через JS) -->
+      <div class="blog-skeleton"><div class="skel-img"></div><div class="skel-body"><div class="skel-line full"></div></div></div>
+      <div class="blog-skeleton"><div class="skel-img"></div><div class="skel-body"><div class="skel-line full"></div></div></div>
+      <div class="blog-skeleton"><div class="skel-img"></div><div class="skel-body"><div class="skel-line full"></div></div></div>
+    </div>
+  </div>
+
+  <!-- Стрелка Вправо -->
+  <button class="blog-arrow arrow-right" id="blog-next-btn" aria-label="Вперед">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+  </button>
+  
+</div>
+
+<!-- Пустое состояние выносим за пределы слайдера -->
+<div class="blog-empty" id="blog-empty" style="display: none;">
+  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" style="margin:0 auto 16px"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+  Статьи появятся здесь. Добавьте первую в админ-панели.
+</div>
+  </section>
+
+  <!-- MODAL для статьи -->
+  <div id="blog-modal" class="blog-modal">
+
+    <!-- Кнопка всегда видна — sticky к верху модала при скролле -->
+    <button class="blog-modal-close" id="blog-modal-close">
+      Назад к статьям
+      <span class="close-icon">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </span>
+    </button>
+
+    <div class="blog-modal-wrap">
+      <div class="blog-modal-meta" id="bm-date"></div>
+      <h1 class="blog-modal-title" id="bm-title"></h1>
+      <img src="" alt="" class="blog-modal-img" id="bm-img">
+      <div class="blog-modal-text" id="bm-text"></div>
+    </div>
+
+  </div>
+
+
+  <!-- CTA + BOOKING FORM -->
+  <section class="cta-section" id="contact">
+    <div class="cta-bg">
+      <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1920&q=80" alt="CTA"/>
+      <div class="cta-overlay"></div>
+    </div>
+    <div class="cta-glow"></div>
+    <div class="container">
+      <div class="cta-content" data-scroll>
+        <div class="section-label">Запись на сервис</div>
+        <h2 class="cta-title">Готовы записаться?</h2>
+        <p class="cta-sub">Звоните или пишите — ответим быстро и запишем на удобное время</p>
+        <div class="cta-actions">
+          <a href="https://wa.me/77079330105" target="_blank" class="btn btn-primary btn-large" id="cms-cta-whatsapp">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+            WhatsApp
+          </a>
+          <a href="tel:+77079330105" class="btn btn-outline btn-large" id="cms-phone-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 11.5 19.79 19.79 0 01.07 2.86 2 2 0 012.03 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            <span id="cms-phone-text">+7 707 933 01 05</span>
+          </a>
+        </div>
+        <div class="cta-info">
+          <div class="ci-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0112 2a8 8 0 018 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span id="cms-address">Проспект Райымбека, 486Б/127 бокс, Алматы</span>
+          </div>
+          <div class="ci-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span id="cms-hours">Пн–Пт: 10:00–19:00</span>
+          </div>
+          <div class="ci-item" style="margin-top:4px;">
+            <a href="https://2gis.kz/almaty/firm/70000001065616136" target="_blank" class="btn-2gis">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0112 2a8 8 0 018 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
+              Открыть в 2ГИС
+            </a>
+          </div>
+        </div>
+
+        <!-- BOOKING FORM -->
+        <div class="booking-form">
+          <h3>Оставить заявку онлайн</h3>
+          <div class="bf-grid">
+            <div class="bf-field">
+              <input type="text" id="bf-name" placeholder="Ваше имя *" />
+            </div>
+            <div class="bf-field">
+              <input type="tel" id="bf-phone" placeholder="+7 (___) ___ __ __" maxlength="18" autocomplete="tel" />
+            </div>
+            <div class="bf-field">
+              <input type="text" id="bf-car" placeholder="Автомобиль (Audi A4, 2019)" />
+            </div>
+            <div class="bf-field">
+              <select id="bf-service">
+                <option value="" disabled selected>Выберите услугу</option>
+                <!-- Заполняется из Firebase коллекции 'services' -->
+              </select>
+            </div>
+            <div class="bf-field bf-full">
+              <textarea id="bf-message" placeholder="Опишите проблему или пожелания (необязательно)"></textarea>
+            </div>
+          </div>
+          <div class="bf-submit">
+            <button class="btn btn-primary" id="bf-btn" onclick="submitBooking()">
+              Отправить заявку
+            </button>
+            <span class="bf-note">Ответим в течение 30 минут в рабочее время</span>
+          </div>
+          <div id="form-status"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#hero" class="nav-logo">
+            <div class="logo-icon">
+              <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="25" cy="25" r="23" stroke="#c0392b" stroke-width="1.5"/>
+                <path d="M10 25 L25 10 L40 25" stroke="#fff" stroke-width="2.5" fill="none"/>
+                <path d="M16 30 L25 10 L34 30" stroke="#c0392b" stroke-width="1.5" fill="none"/>
+              </svg>
+            </div>
+            <div class="logo-text">
+              <span class="logo-main">VAG</span>
+              <span class="logo-sub">PERFORMANCE</span>
+            </div>
+          </a>
+          <p class="footer-tagline">Профессиональный сервис<br>VAG автомобилей в Алматы</p>
+          <div class="footer-socials">
+            <!--
+              id="cms-social-instagram" и id="cms-social-whatsapp"
+              href управляется из админки (вкладка Контент → Соцсети)
+            -->
+            <a href="https://instagram.com" target="_blank" class="social-btn" aria-label="Instagram" id="cms-social-instagram">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="https://wa.me/77079330105" target="_blank" class="social-btn" aria-label="WhatsApp" id="cms-social-whatsapp">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Услуги</h4>
+          <ul id="footer-services-list">
+            <!-- Заполняется из Firestore (коллекция 'services') через script.js -->
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Бренды</h4>
+          <ul>
+            <li><a href="#">Audi</a></li>
+            <li><a href="#">Volkswagen</a></li>
+            <li><a href="#">Skoda</a></li>
+            <li><a href="#">Porsche</a></li>
+            <li><a href="#">Zeekr</a></li>
+            <li><a href="#">SEAT / Cupra</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Контакты</h4>
+          <div class="footer-contacts">
+            <div class="fc-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 11.5 19.79 19.79 0 01.07 2.86 2 2 0 012.03 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+              <a href="tel:+77079330105" id="cms-footer-phone">+7 707 933 01 05</a>
+            </div>
+            <div class="fc-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0112 2a8 8 0 018 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
+              <span id="cms-footer-address">Проспект Райымбека, 486Б/127 бокс, Алматы 050031</span>
+            </div>
+            <div class="fc-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span id="cms-footer-hours">Пн–Пт: 10:00–19:00<br>Сб–Вс: Выходной</span>
+            </div>
+          </div>
+          <div class="payment-methods">
+            <span class="pm-label">Оплата:</span>
+            <span class="pm-tag">Карта</span>
+            <span class="pm-tag">Наличные</span>
+            <span class="pm-tag">QR</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="fb-copy">© 2025 VAG Performance. Все права защищены.</div>
+        <div class="fb-made">Алматы, Казахстан</div>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- Firebase CDN -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

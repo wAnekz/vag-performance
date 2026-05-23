@@ -1,0 +1,115 @@
+.services {
+  padding: 120px 0;
+  background: var(--dark);
+  position: relative;
+  overflow: hidden;
+}
+
+.services-bg-text {
+  position: absolute;
+  font-family: var(--font-display);
+  font-size: 22vw;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255,255,255,0.025);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  white-space: nowrap;
+  letter-spacing: 0.1em;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: rgba(255,255,255,0.04);
+}
+
+.service-card {
+  background: var(--dark);
+  padding: 40px 32px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.service-card:hover {
+  background: var(--dark2);
+  transform: translateY(-4px);
+  z-index: 2;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px var(--red-glow-sm);
+}
+
+.sc-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 120%, var(--red-glow-sm), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.service-card:hover .sc-glow { opacity: 1; }
+
+.sc-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--white);
+  background: var(--red);
+  padding: 3px 8px;
+  border-radius: 1px;
+}
+
+.sc-icon {
+  width: 52px;
+  height: 52px;
+  margin-bottom: 24px;
+  color: var(--red);
+  transition: transform 0.4s ease;
+}
+
+.service-card:hover .sc-icon { transform: scale(1.1); }
+
+.sc-icon svg { width: 100%; height: 100%; }
+
+.sc-title {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--white);
+  margin-bottom: 12px;
+}
+
+.sc-desc {
+  font-size: 0.82rem;
+  color: var(--light-muted);
+  line-height: 1.75;
+}
+
+.sc-arrow {
+  position: absolute;
+  bottom: 32px;
+  right: 32px;
+  font-size: 1.2rem;
+  color: var(--red);
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: var(--transition);
+}
+
+.service-card:hover .sc-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.service-card.featured {
+  background: linear-gradient(135deg, rgba(192,57,43,0.15) 0%, var(--dark) 100%);
+  border-top: 2px solid var(--red);
+}
