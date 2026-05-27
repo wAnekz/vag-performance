@@ -201,7 +201,15 @@
         <p class="section-desc">Полный спектр работ для вашего автомобиля — от технического обслуживания до серьёзного ремонта</p>
       </div>
       <div class="services-grid" id="services-grid" data-scroll>
+        <!-- Скелетоны — заменяются данными из Firebase -->
+        <div class="service-card service-skeleton" style="min-height:220px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:12px;animation:skelPulse 1.4s ease-in-out infinite;"></div>
+        <div class="service-card service-skeleton" style="min-height:220px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:12px;animation:skelPulse 1.4s ease-in-out infinite 0.15s;"></div>
+        <div class="service-card service-skeleton" style="min-height:220px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:12px;animation:skelPulse 1.4s ease-in-out infinite 0.3s;"></div>
+        <div class="service-card service-skeleton" style="min-height:220px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:12px;animation:skelPulse 1.4s ease-in-out infinite 0.45s;"></div>
+        <div class="service-card service-skeleton" style="min-height:220px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:12px;animation:skelPulse 1.4s ease-in-out infinite 0.6s;"></div>
+        <div class="service-card service-skeleton" style="min-height:220px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:12px;animation:skelPulse 1.4s ease-in-out infinite 0.75s;"></div>
       </div>
+      <style>@keyframes skelPulse{0%,100%{opacity:.4}50%{opacity:.9}}</style>
     </div>
   </section>
 
@@ -475,7 +483,30 @@
       </div>
     </div>
   </footer>
-  
+
+
+  <div class="gallery-modal" id="galleryModal" style="display:none">
+    <button class="gallery-modal-close" id="galleryModalClose">
+      <span>ЗАКРЫТЬ</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+    <div class="gallery-modal-container">
+      <div class="gallery-modal-content">
+        <div class="gallery-modal-media">
+          <img id="galleryModalImg" src="" alt="" />
+        </div>
+        <div class="gallery-modal-info">
+          <h2 class="gallery-modal-title" id="galleryModalTitle">Название работы</h2>
+          <p class="gallery-modal-desc" id="galleryModalDesc"></p> 
+        </div>
+      </div>
+    </div>
+  </div>
+
+
   <!-- Firebase CDN -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>

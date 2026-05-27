@@ -96,17 +96,35 @@ function formatPhone(raw) {
   return out;
 }
   const db = firebase.firestore();
-  db.enablePersistence({ synchronizeTabs: true }).catch(err => {
-    console.warn('Persistence не поддерживается:', err.code);
-  });
 
+  // Офлайн-кеш включаем ДО первых запросов.
+  // После resolve/reject persistence (в любом случае) запускаем загрузку данных —
+  // это гарантирует корректную работу с первого визита в любом браузере.
+  db.enablePersistence({ synchronizeTabs: true })
+    .catch(function(){}) // FAILED_PRECONDITION (несколько вкладок) или инкогнито — ок
+    .finally(loadAllFirebaseData);
+
+  // Обертка с таймаутом + 1 повтор: если Firebase завис за 10 сек - пробуем снова
+  function fetchWithRetry(fn, retries, ms) {
+    retries = retries === undefined ? 1 : retries;
+    ms = ms === undefined ? 12000 : ms;
+    return new Promise(function(resolve, reject) {
+      var done = false;
+      var timer = setTimeout(function() {
+        if (done) return; done = true;
+        if (retries > 0) { fetchWithRetry(fn, retries-1, ms).then(resolve).catch(reject); }
+        else { reject(new Error('Firestore timeout')); }
+      }, ms);
+      fn().then(function(r){ if(done) return; done=true; clearTimeout(timer); resolve(r); })
+         .catch(function(e){ if(done) return; done=true; clearTimeout(timer); reject(e); });
+    });
+  }
 
   // ==========================================
   // 3. ЗАГРУЗКА КОНТЕНТА ИЗ FIRESTORE
   // ==========================================
-
-  // --- Статистика (stats/main) ---
-  db.doc('stats/main').get().then(doc => {
+  function loadAllFirebaseData() {
+  fetchWithRetry(function(){ return db.doc('stats/main').get(); }).then(doc => {
     if (!doc.exists) return;
     const d = doc.data();
 
@@ -126,7 +144,7 @@ function formatPhone(raw) {
 
 
   // --- Контент (content/main): телефон, адрес, часы, тексты, изображение, соцсети, рейтинг ---
-  db.doc('content/main').get().then(doc => {
+  fetchWithRetry(function(){ return db.doc('content/main').get(); }).then(doc => {
     if (!doc.exists) return;
     const d = doc.data();
 
@@ -207,19 +225,23 @@ function formatPhone(raw) {
 
 
   // --- Преимущества (whyus) ---
-  db.collection('whyus').orderBy('order', 'asc').get().then(snap => {
-    if (snap.empty) return;
+  fetchWithRetry(function(){ return db.collection('whyus').orderBy('order', 'asc').get(); }).then(snap => {
+    if (snap.empty) return; // Если в базе пусто, оставляем статичные карточки из HTML
 
     const grid = document.getElementById('whyus-grid');
     if (!grid) return;
 
-    grid.innerHTML = '';
+    grid.innerHTML = ''; // Очищаем статику
 
-    let idx = 0;
-    snap.forEach(doc => {
+    // Конвертируем в массив чтобы получить нормальный индекс (Firestore forEach не даёт idx)
+    const whyDocs = [];
+    snap.forEach(doc => whyDocs.push(doc));
+
+    whyDocs.forEach((doc, idx) => {
       const d = doc.data();
+
+      // Форматируем номер для дизайна (01, 02, 03...) независимо от поля order в БД
       const orderNum = (idx + 1).toString().padStart(2, '0');
-      idx++;
 
       const card = document.createElement('div');
       card.className = 'why-card';
@@ -248,7 +270,7 @@ function formatPhone(raw) {
 
   // --- Слайдер (content/slider) ---
   // Загружаем URL фото слайдера из Firestore; если не заданы — остаётся дефолтный src из HTML
-  db.doc('content/slider').get().then(doc => {
+  fetchWithRetry(function(){ return db.doc('content/slider').get(); }).then(doc => {
     if (!doc.exists) return;
     const d = doc.data();
 
@@ -268,7 +290,7 @@ function formatPhone(raw) {
 
 
   // --- Отзывы (reviews) ---
-  db.collection('reviews').orderBy('createdAt', 'desc').get().then(snap => {
+  fetchWithRetry(function(){ return db.collection('reviews').orderBy('createdAt', 'desc').get(); }).then(snap => {
     if (snap.empty) return;
 
     const grid = document.getElementById('reviews-grid');
@@ -308,7 +330,7 @@ function formatPhone(raw) {
 
 
   // --- Галерея (gallery) ---
-  db.collection('gallery').orderBy('createdAt', 'desc').get().then(snap => {
+  fetchWithRetry(function(){ return db.collection('gallery').orderBy('createdAt', 'desc').get(); }).then(snap => {
     if (snap.empty) return;
 
     const grid = document.getElementById('gallery-grid');
@@ -316,16 +338,20 @@ function formatPhone(raw) {
 
     grid.innerHTML = '';
 
-    snap.forEach((doc, idx) => {
-      const d      = doc.data();
-      const isWide = idx === 0 || idx === 4;
+    // Конвертируем в массив для корректного индекса
+    const galleryDocs = [];
+    snap.forEach(doc => galleryDocs.push(doc));
+
+    galleryDocs.forEach((doc) => {
+      const d = doc.data();
 
       const item = document.createElement('div');
-      item.className = 'g-item' + (isWide ? ' g-wide' : '');
+      item.className = 'g-item';
       item.setAttribute('data-scroll', '');
       item.innerHTML = `
         <img src="${d.url}" alt="${d.title}" loading="lazy"/>
         <div class="g-overlay"><span>${d.title}</span></div>`;
+
       grid.appendChild(item);
     });
 
@@ -335,7 +361,7 @@ function formatPhone(raw) {
 
 
   // --- Услуги (services) — если есть данные в Firestore, заменяем статические карточки ---
-  db.collection('services').orderBy('createdAt', 'asc').get().then(snap => {
+  fetchWithRetry(function(){ return db.collection('services').orderBy('createdAt', 'asc').get(); }).then(snap => {
     if (snap.empty) return;
 
     const grid = document.getElementById('services-grid');
@@ -343,7 +369,7 @@ function formatPhone(raw) {
 
     grid.innerHTML = '';
 
-    const icons = {
+    const emojiToSvg = {
       '⚡': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>`,
       '🔧': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>`,
       '🔍': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>`,
@@ -352,20 +378,32 @@ function formatPhone(raw) {
       '🛞': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>`,
     };
 
-    snap.forEach((doc, idx) => {
+    // Универсальная функция иконки:
+    // - если это SVG-строка из админки → рендерим как есть
+    // - если эмодзи из map → подставляем SVG
+    // - иначе → показываем как текст (эмодзи, буква и т.д.)
+    function resolveIcon(raw) {
+      if (!raw) return emojiToSvg['🔧'];
+      const trimmed = raw.trim();
+      if (trimmed.startsWith('<svg') || trimmed.startsWith('<SVG')) return trimmed;
+      if (emojiToSvg[trimmed]) return emojiToSvg[trimmed];
+      return `<span style="font-size:2rem;line-height:1">${trimmed}</span>`;
+    }
+
+    // Конвертируем в массив для нормального индекса
+    const serviceDocs = [];
+    snap.forEach(doc => serviceDocs.push(doc));
+
+    serviceDocs.forEach((doc) => {
       const d        = doc.data();
-      const svgIcon  = icons[d.icon];
-      const emojiChar = ((d.icon || '⚙️').replace(/\uFE0F/g, '') + '\uFE0F');
-      const iconHtml = svgIcon
-        ? svgIcon
-        : `<span style="font-size:2rem;line-height:1;display:flex;align-items:center;justify-content:center;height:100%;color:initial">${emojiChar}</span>`;
+      const svgIcon  = resolveIcon(d.icon);
       const card     = document.createElement('div');
       card.className = 'service-card' + (d.hot ? ' featured' : '');
       card.setAttribute('data-scroll', '');
       card.innerHTML = `
         ${d.hot ? '<span class="sc-badge">ХИТ</span>' : ''}
         <div class="sc-glow"></div>
-        <div class="sc-icon">${iconHtml}</div>
+        <div class="sc-icon">${svgIcon}</div>
         <div class="sc-title">${d.title}</div>
         <p class="sc-desc">${d.desc}</p>
         <span class="sc-arrow">→</span>`;
@@ -391,7 +429,7 @@ function formatPhone(raw) {
       serviceSelect.appendChild(other);
     }
 
-    // Подставляем услуги в список футера
+    // Заполняем список услуг в футере
     const footerList = document.getElementById('footer-services-list');
     if (footerList) {
       footerList.innerHTML = '';
@@ -401,10 +439,6 @@ function formatPhone(raw) {
         li.innerHTML = `<a href="#services">${d.title}</a>`;
         footerList.appendChild(li);
       });
-      // Постоянная ссылка на блог в конце
-      const blogLi = document.createElement('li');
-      blogLi.innerHTML = '<a href="#blog">Полезные статьи</a>';
-      footerList.appendChild(blogLi);
     }
 
   }).catch(err => console.warn('services:', err));
@@ -417,7 +451,7 @@ function formatPhone(raw) {
   window.currentSlide = 0;
   window.totalArticles = 0;
 
-  db.collection('blog').orderBy('createdAt', 'desc').get().then(snap => {
+  fetchWithRetry(function(){ return db.collection('blog').orderBy('createdAt', 'desc').get(); }).then(snap => {
     const grid = document.getElementById('blog-grid');
     const prevBtn = document.getElementById('blog-prev-btn');
     const nextBtn = document.getElementById('blog-next-btn');
@@ -505,7 +539,9 @@ function formatPhone(raw) {
     const grid = document.getElementById('blog-grid');
     if (grid) grid.innerHTML = '<p style="color:red; padding:20px;">Ошибка загрузки новостей</p>';
   });
-  
+
+  } // конец loadAllFirebaseData()
+
   // ==========================================
   // 4. ФОРМА ЗАЯВКИ → FIRESTORE
   // ==========================================
@@ -535,7 +571,8 @@ window.submitBooking = async function() {
     return;
   }
 
-  if (!service) { 
+  // Проверяем, что значение не пустое, не undefined и не равно дефолтной заглушке
+  if (!service || service === '' || service === 'placeholder') { 
     showError(status, 'Пожалуйста, выберите интересующую услугу из списка.');
     document.getElementById('bf-service').focus();
     return;
@@ -579,7 +616,9 @@ window.submitBooking = async function() {
 
     // Формируем безопасную ссылку и открываем чат в новой вкладке
     const whatsappUrl = `https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(waText)}`;
-    window.location.href = whatsappUrl
+
+    window.location.href = whatsappUrl;
+    // ----------------------------------------
 
     // 2. Визуальное уведомление об успехе на самом сайте
     status.className    = 'success';
@@ -631,6 +670,33 @@ function showError(el, msg) {
       });
     });
   }
+
+  // ==========================================
+  // ГАЛЕРЕЯ — ЗАКРЫТИЕ МОДАЛА
+  // ==========================================
+  const galleryModal      = document.getElementById('galleryModal');
+  const galleryModalClose = document.getElementById('galleryModalClose');
+
+  function closeGalleryModal() {
+    if (galleryModal) galleryModal.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  if (galleryModalClose) {
+    galleryModalClose.addEventListener('click', closeGalleryModal);
+  }
+  // Закрытие кликом на фон
+  if (galleryModal) {
+    galleryModal.addEventListener('click', (e) => {
+      if (e.target === galleryModal) closeGalleryModal();
+    });
+  }
+  // Закрытие клавишей Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && galleryModal && galleryModal.style.display === 'flex') {
+      closeGalleryModal();
+    }
+  });
 
 
   // ==========================================
@@ -790,6 +856,8 @@ document.addEventListener('keydown', (e) => {
 // ==========================================
 // ЛОГИКА СЛАЙДЕРА (КОНЕЦ ФАЙЛА)
 // ==========================================
+window.currentSlide = 0;
+window.totalArticles = 0;
 
 function updateSlider() {
   const grid = document.getElementById('blog-grid');
